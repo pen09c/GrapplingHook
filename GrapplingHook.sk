@@ -1,0 +1,22 @@
+# Minecraft-Skript-GrapplingHook
+# Version 1.0
+
+on right click with fishing rod:
+    if {hook::%player's uuid%} is set:
+        if {hook::%player's uuid%} is alive:
+            set {_v} to vector between player and {hook::%player's uuid%}
+            set {_dist} to distance between player and {hook::%player's uuid%}
+            if {_dist} < 30:
+                set vector length of {_v} to 1.6 + ({_dist} * 0.02)
+                add 0.1 to y of {_v}
+                set velocity of player to {_v}
+                delete {hook::%player's uuid%}
+                stop
+        else:
+            delete {hook::%player's uuid%}
+    wait 1 tick
+    loop entities in radius 3 around player:
+        if loop-entity is not player:
+            if "%type of loop-entity%" contains "hook" or "fishing" or "projectile":
+                set {hook::%player's uuid%} to loop-entity
+                stop loop
